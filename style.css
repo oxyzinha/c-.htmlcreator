@@ -1,25 +1,6 @@
 body {
-  font-family: Arial;
-  margin: 0;
+  background-color: pink ;
+  color: black;
+  font-family: Arial, sans-serif;
   padding: 20px;
-  background-color: #222;
-  color: #fff;
-}
-
-.container {
-  max-width: 960px;
-  margin: auto;
-  background: #333;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-form input, form textarea {
-  display: block;
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 8px;
 }
