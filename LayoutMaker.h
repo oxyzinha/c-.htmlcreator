@@ -1,33 +1,34 @@
 #ifndef LAYOUTMAKER_H
 #define LAYOUTMAKER_H
 
-#include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
 
 class LayoutMaker {
 private:
-    std::vector<std::string> htmlComponents;
-    std::string layoutType;
-    std::string title;
-    std::string bgColor;
-    std::string fontColor;
+    std::string html;
+    std::string css;
+    std::string filename;
 
-    void criarLayout();
-    void gerarHTML();
-    void gerarCSS();
+    void gerarBase();
+    void finalizarHTML();
+    void salvarFicheiros();
+
+public:
+    LayoutMaker();
+    void menu();
     void adicionarTexto();
     void adicionarLista();
     void adicionarVideo();
-    void escolherLayoutPronto();
-    void limparComponentes();
-    void mostrarMenuLayout();
-    void personalizarCores();
-    void gerarTemplatePortfolio(); // NOVO
-
-public:
-    void menu();
+    void adicionarImagem();
+    void adicionarLink();
+    void adicionarFormulario();
+    void aplicarFlexbox();
+    void aplicarGrid();
+    void escolherCoresFontesAlinhamento();
+    void usarTemplatePronto();
+    void usarTemplateBlog(); // <-- Novo
+    void salvarComo();
 };
 
 #endif

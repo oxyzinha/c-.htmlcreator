@@ -1,282 +1,193 @@
 #include "layoutmaker.h"
+#include <iostream>
+#include <fstream>
+
+LayoutMaker::LayoutMaker() {
+    html = "";
+    css = "";
+    filename = "layout";
+}
+
+void LayoutMaker::gerarBase() {
+    html = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='UTF-8'>\n<title>Layout Maker</title>\n<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n";
+    html += "<header>\n<h1>Bem-vindo ao LayoutMaker++</h1>\n</header>\n<main>\n";
+    css = "body {\n  font-family: Arial, sans-serif;\n  padding: 20px;\n  background-color: #f9f9f9;\n  color: #333;\n}\n";
+    css += "header { background-color: #222; color: white; padding: 20px; text-align: center; }\n";
+    css += "footer { background-color: #ddd; color: #000; padding: 10px; text-align: center; }\n";
+}
+
+void LayoutMaker::finalizarHTML() {
+    html += "</main>\n<footer>\n<p>Gerado por LayoutMaker++</p>\n</footer>\n</body>\n</html>";
+}
+
+void LayoutMaker::salvarFicheiros() {
+    finalizarHTML();
+    std::ofstream htmlFile(filename + ".html");
+    std::ofstream cssFile("style.css");
+    htmlFile << html;
+    cssFile << css;
+    htmlFile.close();
+    cssFile.close();
+    std::cout << "Ficheiros '" << filename << ".html' e 'style.css' salvos com sucesso.\n";
+}
 
 void LayoutMaker::menu() {
     int opcao;
+    gerarBase();
     do {
-        std::cout << "\n=== LayoutMaker++ ===\n";
-        std::cout << "1. Criar layout personalizado\n";
-        std::cout << "2. Escolher layout pronto\n";
-        std::cout << "3. Sair\n";
+        std::cout << "\n--- MENU LAYOUTMAKER++ ---\n";
+        std::cout << "1. Adicionar texto\n";
+        std::cout << "2. Adicionar lista\n";
+        std::cout << "3. Adicionar vídeo\n";
+        std::cout << "4. Adicionar imagem\n";
+        std::cout << "5. Adicionar link\n";
+        std::cout << "6. Adicionar formulário de contacto\n";
+        std::cout << "7. Aplicar layout Flexbox\n";
+        std::cout << "8. Aplicar layout Grid\n";
+        std::cout << "9. Personalizar cores, fontes e alinhamento\n";
+        std::cout << "10. Usar template pronto (Portfólio)\n";
+        std::cout << "11. Usar template pronto (Blog)\n";
+        std::cout << "12. Salvar como...\n";
+        std::cout << "0. Sair e gerar ficheiro\n";
         std::cout << "Escolha uma opção: ";
         std::cin >> opcao;
         std::cin.ignore();
 
-        switch (opcao) {
-            case 1:
-                criarLayout();
-                break;
-            case 2:
-                escolherLayoutPronto();
-                break;
-            case 3:
-                std::cout << "Saindo...\n";
-                break;
-            default:
-                std::cout << "Opção inválida.\n";
+        switch(opcao) {
+            case 1: adicionarTexto(); break;
+            case 2: adicionarLista(); break;
+            case 3: adicionarVideo(); break;
+            case 4: adicionarImagem(); break;
+            case 5: adicionarLink(); break;
+            case 6: adicionarFormulario(); break;
+            case 7: aplicarFlexbox(); break;
+            case 8: aplicarGrid(); break;
+            case 9: escolherCoresFontesAlinhamento(); break;
+            case 10: usarTemplatePronto(); return;
+            case 11: usarTemplateBlog(); return;
+            case 12: salvarComo(); break;
+            case 0: salvarFicheiros(); break;
+            default: std::cout << "Opção inválida!\n";
         }
-    } while (opcao != 3);
-}
 
-void LayoutMaker::criarLayout() {
-    limparComponentes();
-    std::cout << "\nTítulo do site: ";
-    std::getline(std::cin, title);
-
-    personalizarCores();
-    mostrarMenuLayout();
-    gerarHTML();
-    gerarCSS();
-
-    std::cout << "Layout HTML e CSS gerado com sucesso!\n";
-}
-
-void LayoutMaker::personalizarCores() {
-    std::cout << "Cor de fundo (ex: #ffffff): ";
-    std::getline(std::cin, bgColor);
-    std::cout << "Cor da fonte (ex: #000000): ";
-    std::getline(std::cin, fontColor);
-}
-
-void LayoutMaker::mostrarMenuLayout() {
-    int escolha;
-    do {
-        std::cout << "\nEscolha componentes para adicionar:\n";
-        std::cout << "1. Adicionar Texto\n";
-        std::cout << "2. Adicionar Lista\n";
-        std::cout << "3. Adicionar Vídeo\n";
-        std::cout << "4. Finalizar\n";
-        std::cout << "Opção: ";
-        std::cin >> escolha;
-        std::cin.ignore();
-
-        switch (escolha) {
-            case 1:
-                adicionarTexto();
-                break;
-            case 2:
-                adicionarLista();
-                break;
-            case 3:
-                adicionarVideo();
-                break;
-            case 4:
-                break;
-            default:
-                std::cout << "Opção inválida.\n";
-        }
-    } while (escolha != 4);
+    } while(opcao != 0);
 }
 
 void LayoutMaker::adicionarTexto() {
     std::string texto;
-    std::cout << "Digite o texto: ";
+    std::cout << "Digite o texto a adicionar: ";
     std::getline(std::cin, texto);
-    htmlComponents.push_back("<p>" + texto + "</p>");
+    html += "<p>" + texto + "</p>\n";
 }
 
 void LayoutMaker::adicionarLista() {
     int n;
-    std::string item;
-    std::cout << "Quantos itens? ";
+    std::cout << "Quantos itens terá a lista? ";
     std::cin >> n;
     std::cin.ignore();
-    std::string lista = "<ul>\n";
+    html += "<ul>\n";
     for (int i = 0; i < n; ++i) {
-        std::cout << "Item " << i + 1 << ": ";
+        std::string item;
+        std::cout << "Item " << i+1 << ": ";
         std::getline(std::cin, item);
-        lista += "<li>" + item + "</li>\n";
+        html += "  <li>" + item + "</li>\n";
     }
-    lista += "</ul>";
-    htmlComponents.push_back(lista);
+    html += "</ul>\n";
 }
 
 void LayoutMaker::adicionarVideo() {
     std::string url;
     std::cout << "URL do vídeo (embed): ";
     std::getline(std::cin, url);
-    htmlComponents.push_back("<iframe width=\"560\" height=\"315\" src=\"" + url + "\" frameborder=\"0\" allowfullscreen></iframe>");
+    html += "<iframe width='560' height='315' src='" + url + "' frameborder='0' allowfullscreen></iframe>\n";
 }
 
-void LayoutMaker::gerarHTML() {
-    std::ofstream html("layout.html");
-    html << "<!DOCTYPE html>\n<html lang=\"pt\">\n<head>\n";
-    html << "<meta charset=\"UTF-8\">\n";
-    html << "<title>" << title << "</title>\n";
-    html << "<link rel=\"stylesheet\" href=\"style.css\">\n";
-    html << "</head>\n<body>\n";
-    html << "<h1>" << title << "</h1>\n";
-    for (const auto& comp : htmlComponents) {
-        html << comp << "\n";
-    }
-    html << "</body>\n</html>";
+void LayoutMaker::adicionarImagem() {
+    std::string src, alt;
+    std::cout << "URL da imagem: ";
+    std::getline(std::cin, src);
+    std::cout << "Texto alternativo: ";
+    std::getline(std::cin, alt);
+    html += "<img src='" + src + "' alt='" + alt + "' style='max-width:100%;'>\n";
 }
 
-void LayoutMaker::gerarCSS() {
-    std::ofstream css("style.css");
-    css << "body {\n";
-    css << "  background-color: " << bgColor << ";\n";
-    css << "  color: " << fontColor << ";\n";
-    css << "  font-family: Arial, sans-serif;\n";
-    css << "  padding: 20px;\n";
-    css << "}\n";
+void LayoutMaker::adicionarLink() {
+    std::string url, texto;
+    std::cout << "URL do link: ";
+    std::getline(std::cin, url);
+    std::cout << "Texto do link: ";
+    std::getline(std::cin, texto);
+    html += "<a href='" + url + "' target='_blank'>" + texto + "</a>\n";
 }
 
-void LayoutMaker::limparComponentes() {
-    htmlComponents.clear();
-    title.clear();
-    bgColor = "#ffffff";
-    fontColor = "#000000";
+void LayoutMaker::adicionarFormulario() {
+    html += "<form action='#' method='post'>\n";
+    html += "  <label for='nome'>Nome:</label><br>\n";
+    html += "  <input type='text' id='nome' name='nome'><br><br>\n";
+    html += "  <label for='email'>Email:</label><br>\n";
+    html += "  <input type='email' id='email' name='email'><br><br>\n";
+    html += "  <label for='mensagem'>Mensagem:</label><br>\n";
+    html += "  <textarea id='mensagem' name='mensagem'></textarea><br><br>\n";
+    html += "  <input type='submit' value='Enviar'>\n";
+    html += "</form>\n";
 }
 
-void LayoutMaker::escolherLayoutPronto() {
-    int escolha;
-    std::cout << "\nEscolha um layout pronto:\n";
-    std::cout << "1. Portfólio moderno\n";
-    std::cout << "Opção: ";
-    std::cin >> escolha;
-    std::cin.ignore();
-
-    switch (escolha) {
-        case 1:
-            gerarTemplatePortfolio();
-            break;
-        default:
-            std::cout << "Opção inválida.\n";
-    }
+void LayoutMaker::aplicarFlexbox() {
+    css += "\n.flex {\n  display: flex;\n  gap: 20px;\n}\n";
+    html += "<div class='flex'>\n  <div>Item 1</div>\n  <div>Item 2</div>\n  <div>Item 3</div>\n</div>\n";
 }
 
-void LayoutMaker::gerarTemplatePortfolio() {
-    std::ofstream html("layout.html");
-    std::ofstream css("style.css");
-
-    html << R"(<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <title>Portfólio - Lara Oliveira</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-  <header>
-    <div class="container">
-      <h1>Lara Oliveira</h1>
-      <p>Desenvolvedora Criativa</p>
-    </div>
-  </header>
-
-  <main class="container">
-    <section id="sobre">
-      <h2>Sobre Mim</h2>
-      <p>Sou apaixonada por tecnologia, design e resolver problemas de forma criativa. Tenho experiência em desenvolvimento web e adoro criar projetos que unem funcionalidade e estética.</p>
-    </section>
-
-    <section id="projetos">
-      <h2>Projetos</h2>
-      <div class="projeto">
-        <h3>LayoutMaker++</h3>
-        <p>Ferramenta desenvolvida em C++ para gerar layouts HTML/CSS diretamente pelo terminal.</p>
-      </div>
-      <div class="projeto">
-        <h3>Meu Jogo Educativo</h3>
-        <p>Jogo interativo voltado ao ensino de saúde mental, combinando diversão e aprendizagem.</p>
-      </div>
-    </section>
-
-    <section id="contato">
-      <h2>Contacto</h2>
-      <p>Entre em contacto comigo pelo e-mail: <a href="mailto:lara@email.com">lara@email.com</a></p>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Lara Oliveira. Todos os direitos reservados.</p>
-    </div>
-  </footer>
-</body>
-</html>
-)";
-
-    css << R"(body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f7fb;
-  color: #333;
-  line-height: 1.6;
+void LayoutMaker::aplicarGrid() {
+    css += "\n.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n";
+    html += "<div class='grid'>\n  <div>Bloco A</div>\n  <div>Bloco B</div>\n  <div>Bloco C</div>\n</div>\n";
 }
 
-.container {
-  width: 90%;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+void LayoutMaker::escolherCoresFontesAlinhamento() {
+    std::string corFundo, corTexto, fonte, alinhamento;
+    std::cout << "Cor de fundo (ex: #f0f0f0): ";
+    std::getline(std::cin, corFundo);
+    std::cout << "Cor do texto (ex: #000000): ";
+    std::getline(std::cin, corTexto);
+    std::cout << "Fonte (ex: Arial): ";
+    std::getline(std::cin, fonte);
+    std::cout << "Alinhamento do texto (left, center, right): ";
+    std::getline(std::cin, alinhamento);
+
+    css += "\nbody {\n";
+    css += "  background-color: " + corFundo + ";\n";
+    css += "  color: " + corTexto + ";\n";
+    css += "  font-family: " + fonte + ";\n";
+    css += "  text-align: " + alinhamento + ";\n";
+    css += "}\n";
 }
 
-header {
-  background-color: #6a5acd;
-  color: white;
-  padding: 40px 0;
-  text-align: center;
-  border-bottom: 5px solid #483d8b;
+void LayoutMaker::usarTemplatePronto() {
+    html = "<!DOCTYPE html>\n<html>\n<head>\n<title>Portfólio</title>\n<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n";
+    html += "<h1>Meu Portfólio</h1>\n<p>Bem-vindo ao meu site!</p>\n";
+    html += "<img src='https://via.placeholder.com/300' alt='Imagem'>\n";
+    html += "<p><a href='#'>Saiba mais</a></p>\n</body>\n</html>\n";
+
+    css = "body { font-family: Verdana; background-color: #f4f4f4; text-align: center; padding: 50px; }\n";
+    salvarFicheiros();
 }
 
-header h1 {
-  margin: 0;
-  font-size: 2.5em;
+void LayoutMaker::usarTemplateBlog() {
+    html = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='UTF-8'>\n<title>Blog</title>\n<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n";
+    html += "<header><h1>Meu Blog</h1></header>\n<main>\n";
+    html += "<article>\n<h2>Primeiro Post</h2>\n<small>Publicado em 4 de junho de 2025</small>\n<p>Este é o conteúdo do meu primeiro post no blog. Espero que gostem!</p>\n</article>\n";
+    html += "<article>\n<h2>Segundo Post</h2>\n<small>Publicado em 3 de junho de 2025</small>\n<p>Aqui vai outro post interessante. Este blog é gerado com C++!</p>\n</article>\n";
+    html += "</main>\n<footer>\n<p>© 2025 Meu Blog. Todos os direitos reservados.</p>\n</footer>\n</body>\n</html>\n";
+
+    css = "body { font-family: Georgia, serif; margin: 0; padding: 0; background-color: #fff; color: #222; }\n";
+    css += "header { background-color: #333; color: white; padding: 20px; text-align: center; }\n";
+    css += "main { padding: 20px; }\n";
+    css += "article { border-bottom: 1px solid #ccc; margin-bottom: 20px; padding-bottom: 20px; }\n";
+    css += "footer { background-color: #eee; color: #000; padding: 10px; text-align: center; }\n";
+    salvarFicheiros();
 }
 
-header p {
-  margin: 5px 0 0;
-  font-size: 1.2em;
-}
-
-main section {
-  margin: 40px 0;
-}
-
-h2 {
-  color: #483d8b;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 5px;
-}
-
-.projeto {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-a {
-  color: #6a5acd;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-footer {
-  background-color: #eee;
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9em;
-  color: #555;
-}
-)";
-
-    std::cout << "Template de portfólio moderno gerado com sucesso!\n";
+void LayoutMaker::salvarComo() {
+    std::cout << "Nome do ficheiro HTML (sem extensão): ";
+    std::getline(std::cin, filename);
+    std::cout << "Salvando como '" << filename << ".html'...\n";
 }

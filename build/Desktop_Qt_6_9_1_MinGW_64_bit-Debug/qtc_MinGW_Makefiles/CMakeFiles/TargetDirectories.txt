@@ -1,0 +1,2 @@
+C:/Users/laram/c++ 26h/layoutmaker/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/qtc_MinGW_Makefiles/CMakeFiles/edit_cache.dir
+C:/Users/laram/c++ 26h/layoutmaker/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/qtc_MinGW_Makefiles/CMakeFiles/rebuild_cache.dir

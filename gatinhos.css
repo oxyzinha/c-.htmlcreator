@@ -1,0 +1,9 @@
+body {
+  background-color: pink;
+  font-family: arial;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
+header { background-color: #f09; color: white; padding: 10px; text-align: center; }
+section { margin: 20px; font-size: 1.2em; }

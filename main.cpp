@@ -1,7 +1,11 @@
-#include "layoutmaker.h"
+#include <QApplication>
+#include "mainmenu.h"  // sua janela gráfica MainMenu
 
-int main() {
-    LayoutMaker layoutMaker;
-    layoutMaker.menu();
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    MainMenu window;   // cria a janela
+    window.show();     // mostra a janela na tela
+
+    return app.exec(); // executa o loop da aplicação Qt
 }
